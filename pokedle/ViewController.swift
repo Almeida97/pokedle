@@ -15,28 +15,24 @@ struct Guess {
     
 }
 
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class ViewController: UIViewController{
     
     @IBOutlet weak var tableView: UITableView!
-    
     @IBOutlet weak var guessTextField: UITextField!
     @IBOutlet weak var guessButton: UIButton!
     
     let correctGuess = Guess(pokeName: "charmander", type: "Fire")
-    
-   
-    
-    var guesses: [Guess] = [Guess(pokeName: "Pokemon", type: "Type(s)", pokeNameBackgroundColor: .gray, typeBackgroundColor: .gray)]
+    var pokemon: Pokemon?
+    var guesses: [Guess] = [] /* = [Guess(pokeName: "Pokemon", type: "Type(s)", pokeNameBackgroundColor: .gray, typeBackgroundColor: .gray)]*/
     
     @IBAction func guessButtonTapped(_ sender: Any) {
         var userGuess = Guess(pokeName: guessTextField.text, type: "Fire")
+        
         if userGuess.pokeName == correctGuess.pokeName {
             userGuess.pokeNameBackgroundColor = .green
             userGuess.typeBackgroundColor = .green
-            guesses.insert(userGuess, at: 1)
+            guesses.insert(userGuess, at: 0)
         }else{
-            //IF the name is not correct then check each type to see if green , red or orange
-            //fetch guess pokemon types and for each type check if equal to correct guess pokemon types , if atleast one passes then background color orange else automaticly red
             userGuess.pokeNameBackgroundColor = .red
             if userGuess.type == correctGuess.type{
                 userGuess.typeBackgroundColor = .orange
@@ -44,9 +40,31 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             }else{
                 userGuess.typeBackgroundColor = .red
             }
-            guesses.insert(userGuess, at: 1)
+            guesses.insert(userGuess, at: 0)
         }
         tableView.reloadData()
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
+        self.tableView.register(UINib(nibName: "CustomHeaderView", bundle: nil), forHeaderFooterViewReuseIdentifier: "CustomHeaderView")
+    }
+
+
+}
+
+extension ViewController: UITableViewDelegate, UITableViewDataSource {
+    
+   
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "CustomHeaderView") as! CustomHeader
+        return headerView
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 50
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -64,18 +82,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         cell.cellType.text = guesses[indexPath.row].type
         cell.cellType.backgroundColor = guesses[indexPath.row].typeBackgroundColor
         return cell
-
-        
     }
     
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.tableView.delegate = self
-        self.tableView.dataSource = self
-        // Do any additional setup after loading the view.
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
     }
-
-
 }
 
