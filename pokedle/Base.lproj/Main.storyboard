@@ -8,10 +8,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--pokemon "Wordle"-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="pokedle" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="pokemon &quot;Wordle&quot;" id="BYZ-38-t0r" customClass="ViewController" customModule="pokedle" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -43,7 +43,7 @@
                                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YvA-ZU-SFI">
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YvA-ZU-SFI">
                                                             <rect key="frame" x="256" y="0.0" width="118" height="40"/>
                                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -111,10 +111,10 @@
             </objects>
             <point key="canvasLocation" x="886.95652173913049" y="77.678571428571431"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Pokemon "wordle"-->
         <scene sceneID="dCy-i4-PWU">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="mY9-zp-r5d" sceneMemberID="viewController">
+                <navigationController title="Pokemon &quot;wordle&quot;" automaticallyAdjustsScrollViewInsets="NO" id="mY9-zp-r5d" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="V3z-mt-e1Z">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>

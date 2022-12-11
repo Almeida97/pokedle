@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		91AAFC91293B86BE00565FD2 /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91AAFC90293B86BE00565FD2 /* Service.swift */; };
+		91AAFC93293DE13000565FD2 /* AllPokemonList.json in Resources */ = {isa = PBXBuildFile; fileRef = 91AAFC92293DE13000565FD2 /* AllPokemonList.json */; };
 		91B719F2292285A00023633A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B719F1292285A00023633A /* AppDelegate.swift */; };
 		91B719F4292285A00023633A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B719F3292285A00023633A /* SceneDelegate.swift */; };
 		91B719F6292285A00023633A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B719F5292285A00023633A /* ViewController.swift */; };
@@ -23,6 +24,7 @@
 
 /* Begin PBXFileReference section */
 		91AAFC90293B86BE00565FD2 /* Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
+		91AAFC92293DE13000565FD2 /* AllPokemonList.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = AllPokemonList.json; sourceTree = "<group>"; };
 		91B719EE292285A00023633A /* pokedle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = pokedle.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		91B719F1292285A00023633A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		91B719F3292285A00023633A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -81,6 +83,7 @@
 				91E2E14C29296C0900244114 /* CustomHeader.swift */,
 				91E2E14E29296FA700244114 /* DnD9mXkXsAEGdPi.jpeg */,
 				91AAFC90293B86BE00565FD2 /* Service.swift */,
+				91AAFC92293DE13000565FD2 /* AllPokemonList.json */,
 			);
 			path = pokedle;
 			sourceTree = "<group>";
@@ -147,6 +150,7 @@
 				91E2E14B2929664800244114 /* CustomHeaderView.xib in Resources */,
 				91B71A01292285A20023633A /* LaunchScreen.storyboard in Resources */,
 				91B719FE292285A20023633A /* Assets.xcassets in Resources */,
+				91AAFC93293DE13000565FD2 /* AllPokemonList.json in Resources */,
 				91B719F9292285A00023633A /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

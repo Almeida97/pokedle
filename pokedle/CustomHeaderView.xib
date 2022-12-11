@@ -46,6 +46,11 @@
                 <constraint firstAttribute="trailing" secondItem="jnz-mH-kkc" secondAttribute="trailing" id="t7d-Rs-E7y"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="headerImage" destination="MwV-39-psN" id="oNm-3I-x3k"/>
+                <outlet property="headerNameLabel" destination="7FP-ko-ZdF" id="R5w-wo-62K"/>
+                <outlet property="headerTypeLabel" destination="a7n-8S-wuV" id="LNI-0b-nAY"/>
+            </connections>
             <point key="canvasLocation" x="139" y="93"/>
         </view>
     </objects>

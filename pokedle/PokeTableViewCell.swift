@@ -14,7 +14,10 @@ class PokeTableViewCell: UITableViewCell {
     @IBOutlet weak var cellType: UILabel!
     
     override func awakeFromNib() {
-        
+        cellType.layer.masksToBounds = true
+        cellLabel.layer.masksToBounds = true
+        cellType.layer.cornerRadius = 8
+        cellLabel.layer.cornerRadius = 8
     }
     
 }
