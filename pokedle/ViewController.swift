@@ -9,26 +9,24 @@ import UIKit
 
 class ViewController: UIViewController{
     
-    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var pokemonTableView: UITableView!
     @IBOutlet weak var guessTextField: UITextField!
     @IBOutlet weak var guessButton: UIButton!
+    var autoCompleteTableView = UITableView()
     
     var correctPokemon: Pokemon?
     var userPokemon: Pokemon?
     var pokemonGuesses = [Guess]()
     var allPokemonNames = [String]()
+    var filteredPokemonNames = [String]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.tableView.delegate = self
-        self.tableView.dataSource = self
+        self.pokemonTableView.delegate = self
+        self.pokemonTableView.dataSource = self
         self.guessTextField.delegate = self
-        self.tableView.register(UINib(nibName: "CustomHeaderView", bundle: nil), forHeaderFooterViewReuseIdentifier: "CustomHeaderView")
-//        Service.fetchAutoCompleteList { resultsArray in
-//            print(resultsArray)
-//        }
+        self.pokemonTableView.register(UINib(nibName: "CustomHeaderView", bundle: nil), forHeaderFooterViewReuseIdentifier: "CustomHeaderView")
         allPokemonNames = Service.fetchAutoCompleteList().allNames
-        //let done = Service.fetchAutoCompleteList().filteredNames("ra")
         newGame()
         
     }
@@ -40,7 +38,7 @@ class ViewController: UIViewController{
         }
         pokemonGuesses = []
         DispatchQueue.main.async {
-            self.tableView.reloadData()
+            self.pokemonTableView.reloadData()
         }
     }
     
@@ -60,22 +58,25 @@ class ViewController: UIViewController{
             }))
             DispatchQueue.main.async {
                 self.present(alert, animated: true)
-                self.tableView.reloadData()
+                self.pokemonTableView.reloadData()
             }
         }
         Service.fetchPokemonImage(url: (self.userPokemon?.sprites.front_default)!) { imageData in
             DispatchQueue.main.async { [weak self] in
                 userGuess.pokemonImage = imageData
                 self!.pokemonGuesses.insert(userGuess, at: 0)
-                self!.tableView.reloadData()
+                self!.pokemonTableView.reloadData()
             }
         }
     }
 
     @IBAction func guessButtonTapped(_ sender: Any) {
-        guard let pokemonText = guessTextField.text, guessTextField.text != nil else{
+        guard let pokemonText = guessTextField.text?.lowercased(), guessTextField.text != nil else{
             return
         }
+        filteredPokemonNames = []
+        autoCompleteTableView.reloadData()
+        autoCompleteTableView.isHidden = true
         Service.fetchPokemon(name: pokemonText) { [weak self] pokemon in
             if pokemon == nil {
 //                let alert = UIAlertController(title: "Error", message: "Please insert a valid pokemon", preferredStyle: .alert)
@@ -95,27 +96,57 @@ class ViewController: UIViewController{
 
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
 
+    func tableViewSetUp(){
+        autoCompleteTableView.frame = CGRect(x: guessTextField.frame.minX-10, y: guessTextField.frame.minY-150, width: (guessTextField.frame.width + guessButton.frame.width)+20, height: 150)
+        autoCompleteTableView.layer.masksToBounds = true
+        autoCompleteTableView.register(UITableViewCell.self, forCellReuseIdentifier: "autoCompleteCell")
+    }
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "CustomHeaderView") as! CustomHeader
+        if tableView == pokemonTableView {
+            let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "CustomHeaderView") as! CustomHeader
+        return headerView
+        }
+        let headerView = UITableViewHeaderFooterView(reuseIdentifier: "random")
         return headerView
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 50
+        if tableView == pokemonTableView {
+            return 50
+        }
+        return 0
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return pokemonGuesses.count
+        if tableView == autoCompleteTableView {
+            return filteredPokemonNames.count
+        }else{
+            return pokemonGuesses.count
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if tableView == autoCompleteTableView {
+            guessTextField.text = filteredPokemonNames[indexPath.row]
+            filteredPokemonNames = []
+            autoCompleteTableView.reloadData()
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "PokeTableViewCell", for: indexPath) as! PokeTableViewCell
-        cell.cellImage.image = UIImage(data: pokemonGuesses[indexPath.row].pokemonImage!)
-        cell.cellLabel.text = pokemonGuesses[indexPath.row].pokemon?.name
-        cell.cellType.text = pokemonGuesses[indexPath.row].pokemon?.alltypesString
-        cell.cellType.backgroundColor = pokemonGuesses[indexPath.row].typeColor
-        cell.cellLabel.backgroundColor = pokemonGuesses[indexPath.row].nameColor
-        return cell
+        if tableView == autoCompleteTableView {
+            let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "autoCompleteCell")
+            cell.textLabel?.text = filteredPokemonNames[indexPath.row]
+            return cell
+        }else{
+            let cell = tableView.dequeueReusableCell(withIdentifier: "PokeTableViewCell", for: indexPath) as! PokeTableViewCell
+            cell.cellImage.image = UIImage(data: pokemonGuesses[indexPath.row].pokemonImage!)
+            cell.cellLabel.text = pokemonGuesses[indexPath.row].pokemon?.name
+            cell.cellType.text = pokemonGuesses[indexPath.row].pokemon?.alltypesString
+            cell.cellType.backgroundColor = pokemonGuesses[indexPath.row].typeColor
+            cell.cellLabel.backgroundColor = pokemonGuesses[indexPath.row].nameColor
+            return cell
+        }
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -133,14 +164,21 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
 extension ViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         let currentText = textField.text ?? ""
-
-          // attempt to read the range they are trying to change, or exit if we can't
-          guard let stringRange = Range(range, in: currentText) else { return false }
-
-          // add their new text to the existing text
-          let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
-        let filteredNames = allPokemonNames.filter { $0.starts(with: updatedText) }
-        print(filteredNames.count)
+        autoCompleteTableView.delegate = self
+        autoCompleteTableView.dataSource = self
+        autoCompleteTableView.tag = 18
+        view.addSubview(autoCompleteTableView)
+        // attempt to read the range they are trying to change, or exit if we can't
+        guard let stringRange = Range(range, in: currentText) else { return false }
+        
+        // add their new text to the existing text
+        let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
+        autoCompleteTableView.isHidden = false
+        filteredPokemonNames = allPokemonNames.filter { $0.starts(with: updatedText.lowercased()) }
+        tableViewSetUp()
+        DispatchQueue.main.async {
+            self.autoCompleteTableView.reloadData()
+        }
         return true
         
     }
